@@ -180,6 +180,10 @@ function Switch-USMAppVersion([string] $App, [string] $Version) {
     $target_current = Join-Path $target_app "current"
     $target_version = Join-Path $target_app $Version
 
+    if ($Version -eq "current") {
+        throw "Cannot set current version to 'current'"
+    }
+
     if (!(Test-Path $target_app)) {
         throw "App $App does not exist"
     }
