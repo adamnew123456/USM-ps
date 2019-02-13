@@ -25,13 +25,13 @@ but not on a native Windows shell.
 # Requirements
 
 Just Powershell. Most testing has been on Linux, but it should work on all
-platforms that Powershell core supports.
+platforms that Powershell Core supports.
 
 # Usage
 ## Getting Started
 
 1. Create a USM directory inside one of the directories in your
-   $env:PSModulePath and copy USM.ps1 into it.
+   PSModulePath and copy USM.ps1 into it.
 
 2. Run `Import-Module USM` and then `Install-USM`. This will install the
    .usm.ps1 script and USM Apps directory (by default into your HOME or
@@ -46,7 +46,7 @@ To add new software, you can use `Add-USMApp`:
     PS> Add-USMApp -App some-scripts -Version 1.0
     PS> cd "$env:USM_PATH/some-scripts/1.0"
     PS> mkdir bin
-    PS> echo 'Write-Output "Hello world from Powershell!"' > hello.ps1
+    PS> echo 'Write-Output "Hello world from Powershell!"' > bin/hello.ps1
 
 Make sure to dot-source your .usm.ps1 script after adding or removing software
 to ensure that your PATH is updated.
@@ -70,7 +70,7 @@ add other versions:
     PS> Add-USMApp -App some-scripts -Version 2.0
     PS> cd "$env:USM_PATH/some-scripts/2.0"
     PS> mkdir bin
-    PS> echo 'Write-Output "Advanced hello world from Powershell!"' > hello.ps1
+    PS> echo 'Write-Output "Advanced hello world from Powershell!"' > bin/hello.ps1
 
 You can switch between them dynamically (without having to reload your .usm.ps1)
 using `Switch-USMAppVersion`:
