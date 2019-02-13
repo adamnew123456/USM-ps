@@ -11,19 +11,20 @@ function get_current_version([string] $app) {
 
 $environment_script = @'
 # Source this file from your PS profile to update your path
+$pathsep = [IO.Path]::PathSeparator
 
 <#
 Loads the current/bin/ subdirectory of each directory in the given path into the PATH
 environment variable.
 #>
 function populate_path_var([string] $prefix) {
-    $path = $env:PATH.Split([IO.Path]::PathSeparator)
+    $path = $env:PATH.Split($pathsep)
 
     Get-ChildItem $prefix | ForEach-Object {
         $path += Join-Path $_.FullName "current/bin"
     }
 
-    $env:PATH = $path | Join-String -Separator [IO.Path]::PathSeparator
+    $env:PATH = $path | Join-String -Separator $pathsep
 }
 
 <#
@@ -31,11 +32,11 @@ Converts a path into a form that can be consistently compared.
 #>
 function normalize_path([string] $path) {
     if ($IsWindows) {
-        $path.ToLower().Replace("\", "/").TrimEnd("/")
+        $path.ToLower().Replace("\", "/").TrimEnd("/") + "/"
     } elseif ($IsOSX) {
-        $path.ToLower().Trim("/")
+        $path.ToLower().TrimEnd("/") + "/"
     } else {
-        $path.TrimEnd("/")
+        $path.TrimEnd("/") + "/"
     }
 }
 
@@ -45,14 +46,14 @@ given prefix.
 #>
 function clean_path_var([string] $prefix) {
     $normalized_prefix = normalize_path $prefix
-
-    $path = $env:PATH.Split([IO.Path]::PathSeparator)
+    $path = $env:PATH.Split($pathsep)
+   
     $new_path = $path | Where-Object {
         $normalized_element = normalize_path $_
-        !$normalized.StartsWith($normalized_prefix)
+        !$normalized_element.StartsWith($normalized_prefix)
     }
 
-    $env:PATH = $new_path | Join-String -Separator [IO.Path]::PathSeparator
+    $env:PATH = $new_path | Join-String -Separator $pathsep
 }
 
 $env:USM_PATH = "%USM_PATH%"
